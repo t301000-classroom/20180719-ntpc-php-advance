@@ -4,7 +4,7 @@
 
     // 非正常程序進入
     if (!isset($_SESSION['tmp_user_data'])) {
-        header('Location: index.php');
+        header('Location: ' . LOGIN_PAGE);
         die();
     }
 
