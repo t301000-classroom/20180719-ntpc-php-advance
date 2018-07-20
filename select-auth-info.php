@@ -1,8 +1,10 @@
 <?php
+
+    require_once 'config.php';
     session_start();
 
     if (!isset($_SESSION['tmp_user_data'])) {
-        header('Location: index.php');
+        header('Location: ' . LOGIN_PAGE);
         die();
     }
 
@@ -10,12 +12,14 @@
 
     // 只有 1 個身份，直接去檢查是否可以登入
     if (count($auth_infos) === 1) {
+        $_SESSION['tmp_user_data']['auth_info'] = $auth_infos[0];
         header('Location: check.php');
         die();
     }
 
     if (isset($_GET['idx'])) {
         $_SESSION['tmp_user_data']['auth_info'] = $auth_infos[(int) $_GET['idx']];
+
         header('Location: check.php');
         die();
     }
