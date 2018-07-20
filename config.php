@@ -3,14 +3,14 @@
     define('OPENID_HOST', 'localhost:8000');
     // 要取得之資料欄位
     define('OPENID_REQUIRED',  [
-        // 'namePerson/friendly', // 暱稱
+        'namePerson/friendly', // 暱稱
         'contact/email', // 公務信箱
         'namePerson', // 姓名
-        // 'birthDate', // 出生年月日
-        // 'person/gender', // 性別
-        // 'contact/postalCode/home', // 識別碼
+        'birthDate', // 出生年月日
+        'person/gender', // 性別
+        'contact/postalCode/home', // 識別碼
         'contact/country/home', // 單位：簡稱
-        // 'pref/language', // 年級班級座號：6位數字串
+        'pref/language', // 年級班級座號：6位數字串
         'pref/timezone' // 授權資訊，陣列
                         // 元素欄位:
                         // id 單位代碼
@@ -24,7 +24,7 @@
     // OpenID 登入並通過規則檢查之後，要導向哪裡？
     define('AFTER_OPENID_SUCCESS', 'http://localhost:8000/index.php');
     // 開啟除錯模式，可查看規則檢查過程
-    define('DEBUG_MODE', 0);
+    define('DEBUG_MODE', false);
     // 登入規則，空陣列 [] 或 null 代表不設限制
     define('OPENID_RULES', [
         // ['id' => '012345'],
@@ -33,7 +33,7 @@
         // ['id' => ['014569', '012345'], 'role' => ['教師', '家長']],
     ]);
     // 是否略過正常 OpenID 流程，使用假資料？
-    define('SKIP_OPENID_FLOW', true);
+    define('SKIP_OPENID_FLOW', false);
     // 假資料
     define('FAKE_USER', [
         'username' => 't301xxx',
