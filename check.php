@@ -1,12 +1,12 @@
 <?php
-    require_once 'config.php';
-    session_start();
+    require_once 'bootstarp.php';
 
-    // 非正常程序進入
-    if (!isset($_SESSION['tmp_user_data'])) {
-        header('Location: ' . LOGIN_PAGE);
-        die();
-    }
+    // 無暫存之 OpenID 資料則導向至網站登入頁
+    ifNoTmpDataThenRedirectToLoginPage();
+
+    /***************************************************
+     *      主程式區
+     ***************************************************/
 
     // 授權資訊
     $auth_info = $_SESSION['tmp_user_data']['auth_info'];
@@ -14,6 +14,7 @@
     // 登入規則
     $rules = OPENID_RULES;
 
+    // 驗證登入規則
     if ( empty($rules) || is_null($rules) ) {
         // 空陣列 或 null 則不檢查，無條件放行
         $canLogin = true;
@@ -38,15 +39,24 @@
         header('Location: ' . AFTER_OPENID_SUCCESS);
         die();
     } else {
-        // 不能登入
+        // 不能登入，導向至網站登入頁
         unset($_SESSION['tmp_user_data']);
         header('Location: ' . LOGIN_PAGE);
         die();
     }
 
 
+    /***************************************************
+     *      函數區
+     ***************************************************/
 
-
+    /**
+     * 檢查單一筆規則
+     *
+     * @param array $rule
+     *
+     * @return bool
+     */
     function checkSingleRule(array $rule) {
         global $auth_info;
 
@@ -55,35 +65,9 @@
             var_dump('目前檢查規則：', $rule);
         }
 
+        // 逐一檢查規則中之欄位，一不通過則拒絕並略過後續欄位檢查
         $result = false;
         foreach ($rule as $field => $value) {
-
-            // if ($field === 'groups') {
-            //     $result = in_array('社工', ['資訊組長', '教學組長', '註冊組長']);
-            //     var_dump($result);
-            // } else {
-            //     $result = $auth_info[$field] === $value;
-            // }
-
-            // switch ($field) {
-            //     case 'id':
-            //     case 'name':
-            //     case 'role':
-            //     case 'title':
-            //         // if (is_array($value)) {
-            //         //     $result = in_array($auth_info[$field], $value);
-            //         // } else {
-            //         //     $result = $auth_info[$field] === $value;
-            //         // }
-            //         $result = is_array($value) ?
-            //             in_array($auth_info[$field], $value) : $auth_info[$field] === $value;
-            //         break;
-            //     case 'groups':
-            //         $intersect = is_array($value) ?
-            //             count(array_intersect($value, $auth_info['groups'])) : (int) in_array($value, $auth_info['groups']);
-            //         $result = ( $intersect > 0 );
-            // }
-
             $value = is_array($value) ? $value : [$value];
             $auth_info[$field] = is_array($auth_info[$field]) ? $auth_info[$field] : [$auth_info[$field]];
 
@@ -107,43 +91,3 @@
 
         return $result;
     }
-
-
-
-    // 規則-必要值       持有值
-    // $value          $auth_info[$field]
-    // ------------------------------------
-    // string          string  <====
-    // $value    ===   $auth_info[$field]
-    //
-    // string          array  *====== groups
-    //  in_array($value, $auth_info[$field])
-    //  in_array('資訊組長', ['資訊組長'])
-    //
-    //
-    // array           string  <=====
-    // in_array($auth_info[$field], $value)
-    // in_array('教師',  ['學生', '家長'])
-    //
-    // array           array *====== groups
-    // ['資訊組長', '教學組長']     ['教學組長', '註冊組長']
-    //   $intersect =  array_intersect(['資訊組長', '教學組長'], ['教學組長', '註冊組長'])
-    //   count($intersect)  > 0 ?
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

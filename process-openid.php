@@ -1,9 +1,7 @@
 <?php
+    require_once 'bootstarp.php';
 
-    require_once 'openid.php';
-    require_once 'config.php';
-    session_start();
-
+    // 啟用略過 OpenID 流程時，使用假資料
     if (SKIP_OPENID_FLOW) {
         saveTempDataAndSelect(getFakeData());
     }
@@ -29,7 +27,6 @@
 
         default:
             // 開始 openid 認證流程
-            // echo 'start openid flow';
             start($openid);
 
     }
@@ -39,8 +36,13 @@
      * 函數區
      **********************************/
 
-
-
+    /**
+     * 啟動 OpenID 認證流程
+     *
+     * @param \LightOpenID $openid
+     *
+     * @throws \ErrorException
+     */
     function start(LightOpenID $openid) {
         // global $openid;
         $openid->identity = 'https://openid.ntpc.edu.tw/';
@@ -48,7 +50,11 @@
         header('Location: ' . $openid->authUrl());
     }
 
-
+    /**
+     * 取得 OpenID 資料
+     *
+     * @param \LightOpenID $openid
+     */
     function getData(LightOpenID $openid) {
         $attr = $openid->getAttributes();
         $tmp_array = explode('/', $openid->identity);
@@ -71,12 +77,19 @@
         saveTempDataAndSelect($userData);
     }
 
-
+    /**
+     * 導向網站登入頁重新登入
+     */
     function reLogin() {
         header('Location: ' . LOGIN_PAGE);
     }
 
 
+    /**
+     * 暫存 OpenID 資料，導向身份選擇頁
+     *
+     * @param array $userData
+     */
     function saveTempDataAndSelect(array $userData) {
         $_SESSION['tmp_user_data'] = $userData;
 
@@ -84,7 +97,11 @@
         die();
     }
 
-
+    /**
+     * 取得測試用之假資料
+     *
+     * @return array
+     */
     function getFakeData() {
         return FAKE_USER;
     }

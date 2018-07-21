@@ -19,10 +19,14 @@
                         // title 職務別
                         // groups 職稱別，陣列
     ]);
+    // 網站之首頁
+    define('SITE_HOME_PAGE', 'http://localhost:8000');
     // 網站之登入頁面
     define('LOGIN_PAGE', 'http://localhost:8000/index.php');
     // OpenID 登入並通過規則檢查之後，要導向哪裡？
     define('AFTER_OPENID_SUCCESS', 'http://localhost:8000/index.php');
+    // 網站用來判斷是否登入之 session name
+    define('SESSION_NAME_FOR_LOGINED', 'user');
     // 開啟除錯模式，可查看規則檢查過程
     define('DEBUG_MODE', false);
     // 登入規則，空陣列 [] 或 null 代表不設限制
@@ -84,4 +88,3 @@
 
         ]
     ]);
-
