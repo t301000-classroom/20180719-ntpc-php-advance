@@ -48,17 +48,74 @@
         $rows = "";
         foreach ($auth_infos as $key => $info) {
             $groups = implode(',', $info['groups']);
-            $rows .= "<p><a href='{$_SERVER['PHP_SELF']}?idx={$key}'>{$info['name']} {$info['role']} {$groups}</a></p>";
+
+            $rows .=<<<ROW
+                <a href="{$_SERVER['PHP_SELF']}?idx={$key}">
+                    <div class="item">
+                        <div>{$info['name']}</div>
+                        <div>{$info['role']}</div>
+                        <div>
+                            <ul>
+                                <li>{$groups}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </a>
+ROW;
         }
+
         return $list = <<<LIST
-            <div>
-                <h3>{$name} 你好，請選擇登入身份</h3>
-                {$rows}
+            <style>
+                a {
+                  text-decoration: none;
+                  color: #333;
+                }
+                a:hover div {
+                  color: #fff;
+                  background-color: #f41;
+                }
+                ul {
+                  list-style: none;
+                  padding-left: 0;
+                  margin-top: 0;
+                }
+                .container {
+                  background-color: #fff;
+                  margin: 50px auto 0;
+                  width: 500px;
+                  font-size: 20px;
+                  border: 2px solid #aaa;
+                  border-radius: 10px;
+                  overflow: hidden;
+                }
+                .header {
+                  background-color: #00f;
+                  padding:20px;
+                  text-align: center;
+                  color: #fff;
+                  font-weight: 900;
+                }
+                .header > span {
+                  margin-right: 15px;
+                }
+                .item {
+                  display: flex;
+                  justify-content: space-between;
+                  padding: 10px 15px;
+                }
+                .item > div {
+                  padding: 0 10px;
+                }
+            </style>
+            
+            <div class="container">
+                <div class="header">
+                    <span>{$name}</span>你好，請選擇登入身份
+                </div>
+                <div class="body">
+                    {$rows}
+                </div>
             </div>
 LIST;
 
     }
-
-
-
-
